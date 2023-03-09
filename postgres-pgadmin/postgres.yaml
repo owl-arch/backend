@@ -1,0 +1,57 @@
+# PostgreSQL MediaWiki with pgAdmin
+# Access via "http://localhost:54321"
+#   (or "http://$(docker-machine ip):54321" if using docker-machine)
+
+version: '3'
+
+services:
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    # automatically restarts the container - Docker daemon on restart or
+    # the container itself is manually restarted
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "root"
+      POSTGRES_USER: postgres
+      POSTGRES_DB: database
+    ports:
+      - "5432:5432"
+    volumes:
+      - type: bind
+        source: /root/vols/postgres
+        target: /var/lib/postgresql/data
+    networks:
+      net-db-postgres:
+        ipv4_address: 192.168.11.2
+        
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    # automatically restarts the container - Docker daemon on restart or
+    # the container itself is manually restarted
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "marcos.antonio.carvalho@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "master"
+    ports:
+      - "54321:80"
+    volumes:
+      - type: bind
+        source: /root/vols/pgadmin
+        target: /var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      net-db-postgres:
+        ipv4_address: 192.168.11.3
+
+networks:
+  net-db-postgres:
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.11.0/24"
+          gateway: 192.168.11.1
+        

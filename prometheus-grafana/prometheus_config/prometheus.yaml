@@ -1,0 +1,40 @@
+
+global:
+  
+  scrape_interval: 15s # Set o scrape interval para cada 15 secondos. Default é cada 1 minuto.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  
+# Configuração do Alertmanager
+#alerting:
+#  alertmanagers:
+#    - static_configs:
+#        - targets:
+#          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+#rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  
+  # O job name é adicionado como label `job=<job_name>` para qualquer timeseries scraped dessa config.
+  - job_name: "prometheus"
+    
+    scrape_interval: 5s # Esse valor irá sobreescrever o valor padrão global para esse alvo
+  
+    # metrics_path defaults para '/metrics'
+    # scheme defaults para 'http'.
+    metrics_path: /metrics # Endpoint padrão para a raspagem das métricas
+
+    static_configs:
+      - targets: 
+        - localhost:9090
+  
+  # O job name é adicionado como label `job=<job_name>` para qualquer timeseries scraped dessa config.
+  - job_name: "Ubuntu"
+    static_configs:
+      - targets: 
+        - 172.20.15.55:9100

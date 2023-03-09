@@ -1,0 +1,17 @@
+
+Prometheus na porta 9090 estará recebendo infos do RABBITMQ
+http://localhost:9090/targets
+
+Grafana
+http://localhost:3000/
+admin/admin
+nova senha --> skip
+
+DATA SOURCE --> + Prometheus --> url: http://prometheus:9090 --> (save & test)
+
+grafana.com 
+
+--> no rodapé click em DASHBOARD --> search: rabbitmq --> escolha RabbitMQ-Overview --> copia o ID.
+
+--> Dashboar --> +Import --> coloque o ID --> load 
+--> Escolha Prometheus (default)
