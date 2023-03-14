@@ -4,6 +4,16 @@
 
 version: '3'
 
+
+# Criação da rede para o stack de monitoramento
+networks:
+  # docker network create monitoring
+  monitoring:
+    external: true
+  # docker network create monitoring
+  database:
+    external: true
+
 services:
 
   postgres:
@@ -22,9 +32,12 @@ services:
       - type: bind
         source: /root/vols/postgres
         target: /var/lib/postgresql/data
+    #networks:
+    #  net-db-postgres:
+    #    ipv4_address: 192.168.11.2
     networks:
-      net-db-postgres:
-        ipv4_address: 192.168.11.2
+      - database
+      - monitoring  
         
   pgadmin:
     image: dpage/pgadmin4
@@ -43,15 +56,18 @@ services:
         target: /var/lib/pgadmin
     depends_on:
       - postgres
+    #networks:
+    #  net-db-postgres:
+    #    ipv4_address: 192.168.11.3
     networks:
-      net-db-postgres:
-        ipv4_address: 192.168.11.3
+      - database
+    
 
-networks:
-  net-db-postgres:
-    ipam:
-      driver: default
-      config:
-        - subnet: "192.168.11.0/24"
-          gateway: 192.168.11.1
+#networks:
+#  net-db-postgres:
+#    ipam:
+#      driver: default
+#      config:
+#        - subnet: "192.168.11.0/24"
+#          gateway: 192.168.11.1
         
